@@ -1,0 +1,5 @@
+*.pyc
+*.pdf
+pdfs/
+__pycache__/
+lumis_*.py
