@@ -28,11 +28,12 @@ combos["gg"] = []
 for g1,g2 in zip(gluons,gluons):
     combos["gg"].append((g1,g2))
 combos["qg"] = []
-for g1,q2 in zip(gluons,quarks+antiquarks):
-    combos["qg"].extend([
-        (g1,q2),
-        (q2,g1),
-    ])
+for g1 in gluons:
+    for q2 in quarks+antiquarks:
+        combos["qg"].extend([
+            (g1,q2),
+            (q2,g1),
+        ])
 combos["qq"] = []
 for q1,q2 in zip(quarks,antiquarks):
     combos["qq"].extend([
