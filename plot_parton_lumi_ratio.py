@@ -16,7 +16,8 @@ parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
 parser.add_argument("--pdf", type=str, default='NNPDF31_nnlo_as_0118_mc_hessian_pdfas', help="PDF name")
 parser.add_argument("--numer", type=int, required=True, help="cm energy for numerator")
 parser.add_argument("--denom", type=int, default=0, help="cm energy for denominator (default: skip ratio, plot numer directly)")
-parser.add_argument("--yrange", metavar=("ymin","ymax"), type=float, default=(1, 100), nargs=2, help="y axis range (None=auto)")
+parser.add_argument("--yrange", metavar=("ymin","ymax"), type=float, default=(1, 100), nargs=2, help="y axis range")
+parser.add_argument("--liny", default=False, action="store_true", help="linear y scale")
 args = parser.parse_args()
 
 masses, lumis = import_attrs("lumis_{}.py".format(args.pdf), ["masses", "lumis"])
@@ -53,7 +54,8 @@ for ic,combo in enumerate(combos):
 ax.set_xscale('log')
 ax.set_xlim(min(masses), max(masses))
 ax.set_xlabel(r"$m_{\mathrm{X}}$ [GeV]")
-ax.set_yscale('log')
+if not args.liny:
+    ax.set_yscale('log')
 ax.set_ylim(args.yrange[0],args.yrange[1])
 if args.denom>0:
     ax.set_ylabel("luminosity ratio ({:g} TeV / {:g} TeV)".format(args.numer/1000, args.denom/1000))
