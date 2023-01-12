@@ -35,7 +35,9 @@ fig, ax = plt.subplots(figsize=(9, 7))
 for ic,combo in enumerate(combos):
     numer_vals = np.asarray(lumis[args.numer][combo])
     if args.denom>0:
-        denom_vals = np.asarray(lumis[args.denom][combo])
+        # including missing 1/s factor
+        numer_vals = numer_vals/args.numer**2
+        denom_vals = np.asarray(lumis[args.denom][combo])/args.denom**2
         min_length = min(numer_vals.size, denom_vals.size)
         numer_vals = numer_vals[:min_length]
         denom_vals = denom_vals[:min_length]
