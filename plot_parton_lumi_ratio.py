@@ -18,6 +18,7 @@ parser.add_argument("--numer", type=int, required=True, help="cm energy for nume
 parser.add_argument("--denom", type=int, default=0, help="cm energy for denominator (default: skip ratio, plot numer directly)")
 parser.add_argument("--yrange", metavar=("ymin","ymax"), type=float, default=(1, 100), nargs=2, help="y axis range")
 parser.add_argument("--liny", default=False, action="store_true", help="linear y scale")
+parser.add_argument("-v", "--verbose", default=False, action="store_true", help="verbose printouts")
 args = parser.parse_args()
 
 masses, lumis = import_attrs("lumis_{}.py".format(args.pdf), ["masses", "lumis"])
@@ -47,6 +48,9 @@ for ic,combo in enumerate(combos):
         denom_vals = denom_vals[avoid_0]
         mass_vals = mass_vals[avoid_0]
         ratio = numer_vals / denom_vals
+        if args.verbose:
+            print("mass = {}".format(" ".join("{:g}".format(m) for m in mass_vals)))
+            print("{} = {}".format(combo," ".join("{:g}".format(r) for r in ratio)))
     else:
         mass_vals = masses[:numer_vals.size]
         ratio = numer_vals
