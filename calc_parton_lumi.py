@@ -2,6 +2,20 @@ import sys
 sys.path.append(".local/lib/python{}.{}/site-packages".format(sys.version_info.major,sys.version_info.minor))
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 from parton import PDF, PLumi
+import scipy.integrate as integrate
+
+class PLumiNew(object):
+    def __init__(self, pdf, Q2):
+        self.pdf = pdf
+        self.Q2 = Q2
+    def integrand(self, p1, p2, tau, x):
+        def f1(x):
+            return self.pdf.xfxQ2(p1, x, self.Q2) / x
+        def f2(x):
+            return self.pdf.xfxQ2(p2, x, self.Q2) / x
+        return f1(x)*f2(tau/x)/x
+    def L(self, p1, p2, tau):
+        return integrate.quad(lambda x: self.integrand(p1, p2, tau, x), tau, 1)[0]
 
 parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
 parser.add_argument("--pdf", type=str, default='NNPDF31_nnlo_as_0118_mc_hessian_pdfas', help="PDF name")
@@ -50,7 +64,7 @@ for cme in cmenergies:
 
 # loop over quantities
 for mass in masses:
-    plumi = PLumi(pdf, Q2=mass**2)
+    plumi = PLumiNew(pdf, Q2=mass**2)
     for cme in cmenergies:
         # tau = s-hat/s
         tau = mass**2/cme**2
