@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+from matplotlib.offsetbox import AnchoredText
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 
 def import_attrs(pyname, attrs):
@@ -64,9 +65,16 @@ if not args.liny:
     ax.set_yscale('log')
 ax.set_ylim(args.yrange[0],args.yrange[1])
 if args.denom>0:
-    ax.set_ylabel("luminosity ratio ({:g} TeV / {:g} TeV)".format(args.numer/1000, args.denom/1000))
+    ax.set_ylabel("parton luminosity ratio")
+    energy_text = "{:g} TeV / {:g} TeV".format(args.numer/1000, args.denom/1000)
 else:
-    ax.set_ylabel("parton luminosity ({:g} TeV) [pb]".format(args.numer/1000, args.denom/1000))
+    ax.set_ylabel("parton luminosity [pb]")
+    energy_text = "{:g} TeV".format(args.numer/1000)
+energy_text += "\n"+args.pdf
+
+# place text
+energy_box = AnchoredText(energy_text, loc="upper left", frameon=False)
+ax.add_artist(energy_box)
 ax.legend()
 
 # save
