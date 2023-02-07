@@ -19,6 +19,7 @@ parser.add_argument("--numer", type=int, required=True, help="cm energy for nume
 parser.add_argument("--denom", type=int, default=0, help="cm energy for denominator (default: skip ratio, plot numer directly)")
 parser.add_argument("--yrange", metavar=("ymin","ymax"), type=float, default=(1, 100), nargs=2, help="y axis range")
 parser.add_argument("--liny", default=False, action="store_true", help="linear y scale")
+parser.add_argument("--leg", type=str, default='best', help="legend location")
 parser.add_argument("-v", "--verbose", default=False, action="store_true", help="verbose printouts")
 args = parser.parse_args()
 
@@ -75,7 +76,7 @@ energy_text += "\n"+args.pdf
 # place text
 energy_box = AnchoredText(energy_text, loc="upper left", frameon=False)
 ax.add_artist(energy_box)
-ax.legend()
+ax.legend(loc=args.leg)
 
 # save
 if args.denom>0:
